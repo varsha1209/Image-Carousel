@@ -1,23 +1,32 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import { data } from "./constants";
 
 function App() {
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  const handleNext = () => {
+    setActiveImageIndex((prevIndex) => (prevIndex + 1) % data.length);
+  };
+
+  const handlePrevious = () => {
+    setActiveImageIndex((prevIndex) =>
+      prevIndex === 0 ? data.length - 1 : prevIndex - 1
+    );
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(handleNext, 5000);
+    return () => clearTimeout(timer);
+  }, [activeImageIndex]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='CarouselContainer'>
+        <button className='Button' onClick={handlePrevious}>Previous</button>
+          <img className="Image" src={data[activeImageIndex]} alt='wallpaper'/>
+        <button className='Button' onClick={handleNext}>Next</button>
+      </div>
     </div>
   );
 }
